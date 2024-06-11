@@ -19,8 +19,9 @@ public class LogAdapter {
     public void infoStart() {
         Log log = new Log.Builder()
                 .withStatus(LogStatus.INFO_START.getValue())
+                .withMessage("Application started successfully")
                 .build();
-        logger("Application started successfully", log);
+        logger(log);
     }
 
     public void infoShutDown(
@@ -30,8 +31,9 @@ public class LogAdapter {
         Log log = new Log.Builder()
                 .withCorrelationId(correlationId)
                 .withStatus(LogStatus.INFO_SHUTDOWN.getValue())
+                .withMessage(message)
                 .build();
-        logger(message, log);
+        logger(log);
     }
 
     public void error(
@@ -43,11 +45,13 @@ public class LogAdapter {
                 .withCorrelationId(correlationId)
                 .withStatus(LogStatus.ERROR.getValue())
                 .withTrace(trace)
+                .withMessage(message)
                 .build();
-        logger(message, log);
+        logger(log);
     }
 
-    private void logger(String message, Log logging) {
-        logger.info(message, StructuredArguments.keyValue(HEADER, logging));
+    private void logger(Log logging) {
+        logger.info(logging.getMessage(), StructuredArguments.keyValue(HEADER, logging));
+        System.out.println(logging.toString());
     }
 }
